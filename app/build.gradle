@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
@@ -28,6 +30,14 @@ dependencies {
 
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompatVersion}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintLayoutVersion}"
+
+    // moshi
+    implementation "com.squareup.moshi:moshi-kotlin:${rootProject.ext.moshiKotlinVersion}"
+
+    // dagger2
+    implementation "com.google.dagger:dagger-android:${rootProject.ext.dagger2Version}"
+    kapt "com.google.dagger:dagger-compiler:${rootProject.ext.dagger2Version}"
+    kapt "com.google.dagger:dagger-android-processor:${rootProject.ext.dagger2Version}"
 
     // test
     testImplementation "junit:junit:${rootProject.ext.junitVersion}"
