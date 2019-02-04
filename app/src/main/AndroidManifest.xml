@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.paijorx.hello_mvvm_dagger2_kotlin">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
             android:name=".CryptoCurrencyApplication"
             android:allowBackup="true"
