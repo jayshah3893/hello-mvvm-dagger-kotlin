@@ -30,7 +30,9 @@ ext {
     appcompatVersion = "1.1.0-alpha01"
     constraintLayoutVersion = "2.0.0-alpha3"
     moshiKotlinVersion = "1.5.0"
-    dagger2Version = "2.13"
+    dagger2Version = "2.15"
+    archRoomVersion = "1.0.0"
+    archLifecycleVersion = "1.1.0"
 
     //test
     junitVersion = "4.12"
