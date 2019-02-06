@@ -3,6 +3,7 @@
           package="com.paijorx.hello_mvvm_dagger2_kotlin">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
             android:name=".CryptoCurrencyApplication"
@@ -12,7 +13,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".ui.CryptoCurrenciesActivity">
+        <activity android:name=".ui.CryptoCurrencyActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

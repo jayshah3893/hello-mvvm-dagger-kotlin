@@ -17,7 +17,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            buildConfigField 'String', 'URL', '"https://api.coinmarketcap.com/v1/"'
+        }
         release {
+            buildConfigField 'String', 'URL', '"https://api.coinmarketcap.com/v1/"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -41,9 +45,11 @@ dependencies {
 
     // room
     implementation "android.arch.persistence.room:runtime:${rootProject.ext.archRoomVersion}"
+    implementation "android.arch.persistence.room:rxjava2:${rootProject.ext.archRoomVersion}"
     kapt "android.arch.persistence.room:compiler:${rootProject.ext.archRoomVersion}"
 
     // lifecycle
+    implementation "android.arch.lifecycle:extensions:${rootProject.ext.archLifecycleVersion}"
     implementation "android.arch.lifecycle:extensions:${rootProject.ext.archLifecycleVersion}"
     kapt "android.arch.lifecycle:compiler:${rootProject.ext.archLifecycleVersion}"
 

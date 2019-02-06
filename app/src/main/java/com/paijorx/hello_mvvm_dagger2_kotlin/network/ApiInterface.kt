@@ -7,5 +7,5 @@ import retrofit2.http.Query
 
 interface ApiInterface {
     @GET("ticker/")
-    fun getCryptocurrencies(@Query("start") start: String): Observable<List<CryptoCurrency>>
+    fun getCryptCurrencies(@Query("start") start: String): Observable<List<CryptoCurrency>>
 }
