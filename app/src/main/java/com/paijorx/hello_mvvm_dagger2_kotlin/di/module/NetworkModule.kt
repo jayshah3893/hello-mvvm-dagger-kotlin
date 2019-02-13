@@ -1,5 +1,6 @@
 package com.paijorx.hello_mvvm_dagger2_kotlin.di.module
 
+import com.paijorx.hello_mvvm_dagger2_kotlin.BuildConfig
 import com.paijorx.hello_mvvm_dagger2_kotlin.network.ApiInterface
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
@@ -12,7 +13,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
-class NetworkModule(private val baseUrl: String) {
+class NetworkModule() {
 
     @Provides
     @Singleton
@@ -25,7 +26,7 @@ class NetworkModule(private val baseUrl: String) {
     @Provides
     @Singleton
     fun providesRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
-        return Retrofit.Builder().client(okHttpClient).baseUrl(baseUrl)
+        return Retrofit.Builder().client(okHttpClient).baseUrl(BuildConfig.URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()

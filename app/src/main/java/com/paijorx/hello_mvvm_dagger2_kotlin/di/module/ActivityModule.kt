@@ -4,8 +4,9 @@ import com.paijorx.hello_mvvm_dagger2_kotlin.ui.CryptoCurrencyActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
+@Suppress("unused")
 @Module
-abstract class BuilderModule {
+abstract class ActivityModule {
     @ContributesAndroidInjector
     abstract fun contributeCryptoCurrenciesActivity(): CryptoCurrencyActivity
 }

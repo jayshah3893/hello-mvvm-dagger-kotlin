@@ -2,15 +2,33 @@ package com.paijorx.hello_mvvm_dagger2_kotlin.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import java.lang.IllegalArgumentException
+import javax.inject.Provider
+import javax.inject.Singleton
 import kotlin.reflect.jvm.internal.impl.javax.inject.Inject
 
-class CryptoCurrencyViewModelFactory @Inject constructor(private val cryptoCurrencyViewModel: CryptoCurrencyViewModel) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(CryptoCurrencyViewModel::class.java)) {
-            return cryptoCurrencyViewModel as T
-        }
-        throw IllegalArgumentException("Unknown class name")
-    }
+@Singleton
+class CryptoCurrencyViewModelFactory @Inject constructor(
+    private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>)
+    : ViewModelProvider.Factory {
 
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        var creator: Provider<out ViewModel>? = creators[modelClass]
+        if (creator == null) {
+            for ((key, value) in creators) {
+                if (modelClass.isAssignableFrom(key)) {
+                    creator = value
+                    break
+                }
+            }
+        }
+        if (creator == null) {
+            throw IllegalArgumentException("unknown model class " + modelClass)
+        }
+        try {
+            return creator.get() as T
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+    }
 }

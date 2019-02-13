@@ -18,5 +18,5 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun providesCryptoCurrenciesDao(database: Database): CryptoCurrencyDao = database.cryptoCurrenciesDao()
+    fun providesCryptoCurrencyDao(database: Database): CryptoCurrencyDao = database.cryptoCurrenciesDao()
 }

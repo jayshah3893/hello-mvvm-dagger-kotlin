@@ -1,6 +1,5 @@
 package com.paijorx.hello_mvvm_dagger2_kotlin.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy

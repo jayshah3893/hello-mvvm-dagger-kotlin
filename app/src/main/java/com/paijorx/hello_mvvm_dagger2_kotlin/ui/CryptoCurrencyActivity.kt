@@ -6,30 +6,28 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.paijorx.hello_mvvm_dagger2_kotlin.R
 import com.paijorx.hello_mvvm_dagger2_kotlin.adapter.CryptoCurrencyAdapter
+import com.paijorx.hello_mvvm_dagger2_kotlin.db.Database
 import com.paijorx.hello_mvvm_dagger2_kotlin.model.CryptoCurrency
-import com.paijorx.hello_mvvm_dagger2_kotlin.network.ApiClient
-import com.paijorx.hello_mvvm_dagger2_kotlin.network.ApiInterface
 import com.paijorx.hello_mvvm_dagger2_kotlin.utils.Constants
-import com.paijorx.hello_mvvm_dagger2_kotlin.viewmodel.CryptoCurrencyViewModelFactory
 import com.paijorx.hello_mvvm_dagger2_kotlin.viewmodel.CryptoCurrencyViewModel
+import com.paijorx.hello_mvvm_dagger2_kotlin.viewmodel.CryptoCurrencyViewModelFactory
 import com.paijorx.hello_mvvm_dagger2_kotlin.widget.InfiniteScrollListener
 import dagger.android.AndroidInjection
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableObserver
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_cryptocurrency.*
-import kotlin.reflect.jvm.internal.impl.javax.inject.Inject
+import retrofit2.Retrofit
+import javax.inject.Inject
 
 class CryptoCurrencyActivity: AppCompatActivity() {
 
     @Inject lateinit var cryptoCurrencyViewModelFactory: CryptoCurrencyViewModelFactory
+    @Inject lateinit var retrofit: Retrofit
+    @Inject lateinit var database: Database
     private var cryptoCurrencyAdapter = CryptoCurrencyAdapter(ArrayList())
     private lateinit var cryptoCurrencyViewModel: CryptoCurrencyViewModel
     private var currentPage = 0
@@ -39,20 +37,24 @@ class CryptoCurrencyActivity: AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cryptocurrency)
 
-        AndroidInjection.inject(this)
+        val baseUrl = retrofit.baseUrl()
+        Log.d(TAG, baseUrl.host())
+        Log.d(TAG, database.isOpen.toString())
 
-        initializeRecycler()
-
-        cryptoCurrencyViewModel = ViewModelProviders.of(this, cryptoCurrencyViewModelFactory)
-            .get(CryptoCurrencyViewModel::class.java)
-
-        loadData()
-        observerResult()
-        observerError()
-        observerLoader()
+//
+//        initializeRecycler()
+//
+//        cryptoCurrencyViewModel = ViewModelProviders.of(this, cryptoCurrencyViewModelFactory)
+//            .get(CryptoCurrencyViewModel::class.java)
+//
+//        loadData()
+//        observerResult()
+//        observerError()
+//        observerLoader()
     }
 
     override fun onDestroy() {

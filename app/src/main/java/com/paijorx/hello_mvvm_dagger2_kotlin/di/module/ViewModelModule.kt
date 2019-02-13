@@ -1,26 +1,21 @@
 package com.paijorx.hello_mvvm_dagger2_kotlin.di.module
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.paijorx.hello_mvvm_dagger2_kotlin.repository.CryptoCurrencyRepository
+import com.paijorx.hello_mvvm_dagger2_kotlin.di.scope.ViewModelKey
 import com.paijorx.hello_mvvm_dagger2_kotlin.viewmodel.CryptoCurrencyViewModel
 import com.paijorx.hello_mvvm_dagger2_kotlin.viewmodel.CryptoCurrencyViewModelFactory
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import dagger.multibindings.IntoMap
 
 @Module
-class ViewModelModule {
-    @Provides
-    @Singleton
-    fun providesCryptoCurrencyViewModel(cryptoCurrencyRepository: CryptoCurrencyRepository): CryptoCurrencyViewModel =
-        CryptoCurrencyViewModel(cryptoCurrencyRepository)
+abstract class ViewModelModule {
+    @Binds
+    @IntoMap
+    @ViewModelKey(CryptoCurrencyViewModel::class)
+    abstract fun bindCryptoCurrencyViewModel(cryptoCurrencyViewModel: CryptoCurrencyViewModel): ViewModel
 
-    @Provides
-    @Singleton
-    fun providesCryptoCurrencyViewModelFactory(cryptoCurrencyViewModel: CryptoCurrencyViewModel): CryptoCurrencyViewModelFactory =
-        CryptoCurrencyViewModelFactory(cryptoCurrencyViewModel)
-
-    @Provides
-    fun providesViewModelFactory(cryptoCurrencyViewModelFactory: CryptoCurrencyViewModelFactory): ViewModelProvider.Factory = cryptoCurrencyViewModelFactory
-
+    @Binds
+    abstract fun bindViewModelFactory(factory: CryptoCurrencyViewModelFactory) : ViewModelProvider.Factory
 }
