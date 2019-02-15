@@ -14,10 +14,10 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun providesDatabase(application: Application): Database = Room.databaseBuilder(application,
+    fun provideDatabase(application: Application): Database = Room.databaseBuilder(application,
         Database::class.java, Constants.DATABASE_NAME).build()
 
     @Provides
     @Singleton
-    fun providesCryptoCurrencyDao(database: Database): CryptoCurrencyDao = database.cryptoCurrenciesDao()
+    fun provideCryptoCurrencyDao(database: Database): CryptoCurrencyDao = database.cryptoCurrenciesDao()
 }

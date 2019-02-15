@@ -1,96 +1,69 @@
 package com.paijorx.hello_mvvm_dagger2_kotlin.ui
 
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.paijorx.hello_mvvm_dagger2_kotlin.R
-import com.paijorx.hello_mvvm_dagger2_kotlin.adapter.CryptoCurrencyAdapter
 import com.paijorx.hello_mvvm_dagger2_kotlin.base.BaseActivity
-import com.paijorx.hello_mvvm_dagger2_kotlin.model.CryptoCurrency
-import com.paijorx.hello_mvvm_dagger2_kotlin.utils.Constants
-import com.paijorx.hello_mvvm_dagger2_kotlin.viewmodel.CryptoCurrencyViewModel
-import com.paijorx.hello_mvvm_dagger2_kotlin.viewmodel.CryptoCurrencyViewModelFactory
-import com.paijorx.hello_mvvm_dagger2_kotlin.widget.InfiniteScrollListener
-import kotlinx.android.synthetic.main.activity_cryptocurrency.*
+import com.paijorx.hello_mvvm_dagger2_kotlin.databinding.ActivityCryptocurrencyBinding
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject
 
-class CryptoCurrencyActivity: BaseActivity() {
-        @Inject lateinit var cryptoCurrencyViewModelFactory: CryptoCurrencyViewModelFactory
-//    @Inject lateinit var retrofit: Retrofit
-//    @Inject lateinit var database: Database
-    private var cryptoCurrencyAdapter = CryptoCurrencyAdapter(ArrayList())
-    private lateinit var cryptoCurrencyViewModel: CryptoCurrencyViewModel
-    private var currentPage = 0
+
+class CryptoCurrencyActivity: AppCompatActivity(), HasSupportFragmentInjector {
+
+    @Inject lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
 
     companion object {
         private val TAG = CryptoCurrencyActivity::class.simpleName
     }
 
-    override fun layoutRes(): Int {
-        return R.layout.activity_cryptocurrency
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
-        initializeRecycler()
+        val binding: ActivityCryptocurrencyBinding = DataBindingUtil.setContentView(this,
+            R.layout.activity_cryptocurrency)
 
-        cryptoCurrencyViewModel = ViewModelProviders.of(this, cryptoCurrencyViewModelFactory)
-            .get(CryptoCurrencyViewModel::class.java)
+        drawerLayout = binding.drawerLayout
+        navController = Navigation.findNavController(this, R.id.main_nav_fragment)
+        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
 
-        loadData()
-        observerResult()
-        observerError()
-        observerLoader()
+        // setup action bar
+        setSupportActionBar(binding.toolbar)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
+        // setup navigation menu
+        binding.navigation.setupWithNavController(navController)
     }
 
-    override fun onDestroy() {
-        cryptoCurrencyViewModel.disposeElements()
-        super.onDestroy()
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun initializeRecycler() {
-        val gridLayoutManager = GridLayoutManager(this, 1)
-        gridLayoutManager.orientation = RecyclerView.VERTICAL
-
-        recycler.apply {
-            setHasFixedSize(true)
-            layoutManager = gridLayoutManager
-            addOnScrollListener(InfiniteScrollListener({loadData()}, gridLayoutManager))
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
         }
     }
 
-    private fun loadData() {
-        progressBar.visibility = View.VISIBLE
-        cryptoCurrencyViewModel.loadCryptoCurrencies(Constants.LIMIT, Constants.OFFSET)
-        currentPage++
-    }
-
-    private fun observerResult() {
-        cryptoCurrencyViewModel.getResult().observe(this, Observer<List<CryptoCurrency>> {
-            it?.let {
-                val position = cryptoCurrencyAdapter.itemCount
-                cryptoCurrencyAdapter.add(it)
-                recycler.adapter = cryptoCurrencyAdapter
-                recycler.scrollToPosition(position - Constants.LIST_SCROLLING)
-            }
-        })
-    }
-
-    private fun observerError() {
-        cryptoCurrencyViewModel.getError().observe(this, Observer<String> {
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-        })
-    }
-
-    private fun observerLoader() {
-        cryptoCurrencyViewModel.getLoader().observe(this, Observer<Boolean> {
-            progressBar.visibility = if (it) View.VISIBLE
-            else View.GONE
-        })
-    }
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentDispatchingAndroidInjector
 }

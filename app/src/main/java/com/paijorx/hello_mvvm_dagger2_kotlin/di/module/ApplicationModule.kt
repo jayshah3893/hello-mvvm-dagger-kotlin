@@ -11,5 +11,5 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun providesUtils(application: Application): Utils = Utils(application)
+    fun provideUtils(application: Application): Utils = Utils(application)
 }

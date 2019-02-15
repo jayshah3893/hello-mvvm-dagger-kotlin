@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/cryptoCurrencyFragment">
+
+    <fragment
+        android:id="@+id/cryptoCurrencyFragment"
+        android:name="com.paijorx.hello_mvvm_dagger2_kotlin.ui.list.CryptoCurrencyFragment"
+        android:label="CryptoCurrencyFragment"/>
+</navigation>

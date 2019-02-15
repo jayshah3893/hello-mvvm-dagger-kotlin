@@ -18,15 +18,15 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providesOkHttpClient(): OkHttpClient = OkHttpClient.Builder().build()
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder().build()
 
     @Provides
     @Singleton
-    fun providesMoshi(): Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+    fun provideMoshi(): Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
     @Provides
     @Singleton
-    fun providesRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
+    fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
         return Retrofit.Builder().client(okHttpClient).baseUrl(BuildConfig.URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -35,5 +35,5 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providesApiInterface(retrofit: Retrofit): ApiInterface = retrofit.create(ApiInterface::class.java)
+    fun provideApiInterface(retrofit: Retrofit): ApiInterface = retrofit.create(ApiInterface::class.java)
 }

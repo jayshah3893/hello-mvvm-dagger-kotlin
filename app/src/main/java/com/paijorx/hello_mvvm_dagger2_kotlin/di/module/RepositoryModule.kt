@@ -12,7 +12,7 @@ import javax.inject.Singleton
 class RepositoryModule {
     @Provides
     @Singleton
-    fun providesCryptoCurrencyRepository(apiInterface: ApiInterface,
+    fun provideCryptoCurrencyRepository(apiInterface: ApiInterface,
                                          cryptoCurrencyDao: CryptoCurrencyDao,
                                          utils: Utils
     ): CryptoCurrencyRepository = CryptoCurrencyRepository(apiInterface, cryptoCurrencyDao, utils)

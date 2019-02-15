@@ -7,6 +7,6 @@ import dagger.android.ContributesAndroidInjector
 @Suppress("unused")
 @Module
 abstract class ActivityModule {
-    @ContributesAndroidInjector
-    abstract fun contributeCryptoCurrenciesActivity(): CryptoCurrencyActivity
+    @ContributesAndroidInjector(modules = [FragmentModule::class])
+    abstract fun provideCryptoCurrencyActivity(): CryptoCurrencyActivity
 }
