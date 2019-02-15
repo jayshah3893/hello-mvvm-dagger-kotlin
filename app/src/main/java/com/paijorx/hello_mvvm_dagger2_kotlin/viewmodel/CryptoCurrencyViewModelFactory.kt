@@ -2,18 +2,19 @@ package com.paijorx.hello_mvvm_dagger2_kotlin.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
-import kotlin.reflect.jvm.internal.impl.javax.inject.Inject
 
 @Singleton
 class CryptoCurrencyViewModelFactory @Inject constructor(
-    private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>)
+    private val creators: MutableMap<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>)
     : ViewModelProvider.Factory {
 
-    @Suppress("UNCHECKED_CAST")
+    @SuppressWarnings("unchecked")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         var creator: Provider<out ViewModel>? = creators[modelClass]
+
         if (creator == null) {
             for ((key, value) in creators) {
                 if (modelClass.isAssignableFrom(key)) {

@@ -10,7 +10,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 
 @Module
-abstract class ViewModelModule {
+internal abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(CryptoCurrencyViewModel::class)

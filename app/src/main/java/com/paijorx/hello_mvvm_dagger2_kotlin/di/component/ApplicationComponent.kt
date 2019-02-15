@@ -6,7 +6,6 @@ import com.paijorx.hello_mvvm_dagger2_kotlin.di.module.*
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
-import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
@@ -17,7 +16,8 @@ import javax.inject.Singleton
         DatabaseModule::class,
         NetworkModule::class,
         RepositoryModule::class,
-        ActivityModule::class
+        ActivityModule::class,
+        ViewModelModule::class
     ])
 interface ApplicationComponent {
 
